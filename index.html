@@ -2,837 +2,1214 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TilTalk — Learn Kazakh Language</title>
-    <meta name="description"
-        content="Master the Kazakh language with interactive courses, grammar lessons, vocabulary building, and translation games. Start learning today!">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;900&family=Noto+Sans:wght@400;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=18">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kazakh Learning — Admin Panel</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --purple-dark: #5b21b6;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --red: #dc2626;
+      --red-light: #fee2e2;
+      --blue: #2563eb;
+      --blue-light: #dbeafe;
+      --gray: #6b7280;
+      --gray-light: #f3f4f6;
+      --white: #ffffff;
+      --border: #e5e7eb;
+      --shadow: 0 1px 3px rgba(0, 0, 0, .1), 0 1px 2px rgba(0, 0, 0, .06);
+      --radius: 8px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f8fafc;
+      color: #1f2937;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 240px;
+      background: var(--purple-dark);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 0 20px 24px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255, 255, 255, .15);
+    }
+
+    .sidebar-logo span {
+      opacity: .7;
+      font-size: .75rem;
+      display: block;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .nav-group {
+      padding: 16px 0 4px 20px;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      opacity: .5;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background .15s;
+      font-size: .9rem;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, .1);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, .15);
+      border-left-color: #fff;
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 1.1rem;
+    }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      padding: 32px;
+      max-width: 900px;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: var(--gray);
+      font-size: .9rem;
+      margin-bottom: 28px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Forms ── */
+    .form-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .form-grid-3 {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    label {
+      display: block;
+      font-size: .82rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 5px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: .9rem;
+      color: #1f2937;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, .15);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 72px;
+    }
+
+    .form-hint {
+      font-size: .75rem;
+      color: var(--gray);
+      margin-top: 4px;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: .9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+
+    .btn:hover {
+      opacity: .88;
+    }
+
+    .btn:active {
+      transform: scale(.97);
+    }
+
+    .btn-primary {
+      background: var(--purple);
+      color: #fff;
+    }
+
+    .btn-success {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--purple);
+      border: 1.5px solid var(--purple);
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: .8rem;
+    }
+
+    /* ── Alerts ── */
+    .alert {
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: .88rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .alert-success {
+      background: var(--green-light);
+      color: #065f46;
+    }
+
+    .alert-error {
+      background: var(--red-light);
+      color: #991b1b;
+    }
+
+    .alert-info {
+      background: var(--blue-light);
+      color: #1e40af;
+    }
+
+    .alert {
+      display: none;
+    }
+
+    .alert.show {
+      display: flex;
+    }
+
+    /* ── Table ── */
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .875rem;
+    }
+
+    thead tr {
+      background: var(--gray-light);
+    }
+
+    th,
+    td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      font-weight: 600;
+      color: #374151;
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    tr:hover td {
+      background: #fafafa;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 99px;
+      font-size: .72rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .badge-green {
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .badge-blue {
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+
+    .badge-purple {
+      background: var(--purple-light);
+      color: var(--purple);
+    }
+
+    /* ── Login page ── */
+    .login-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--gray-light);
+    }
+
+    .login-card {
+      background: var(--white);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, .12);
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .login-card h1 {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+
+    .login-card p {
+      text-align: center;
+      color: var(--gray);
+      font-size: .88rem;
+      margin-bottom: 28px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+
+      .form-grid-2,
+      .form-grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        width: 56px;
+      }
+
+      .sidebar-logo,
+      .nav-group,
+      .nav-item span {
+        display: none;
+      }
+
+      .nav-item {
+        justify-content: center;
+        padding: 14px;
+      }
+
+      .main {
+        padding: 20px 14px;
+      }
+    }
+  </style>
 </head>
 
-<body class="debug-mode" data-ff-color="#9b6b9e" data-ff-trail="0.08" data-ff-count="500" data-ff-speed="0.8"
-    data-ff-bg="#faf8f3">
-    <!-- Flow field canvas is auto-injected by flow-field-bg.js -->
-    <script src="flow-field-bg.js"></script>
+<body>
 
-    <div id="login-screen">
-        <div class="login-card">
-            <h1 class="login-title">TilTalk</h1>
-            <p class="login-subtitle" data-i18n="login.subtitle">Learn Kazakh Language</p>
-
-            <!-- Login Form -->
-            <form id="login-form">
-                <div class="form-group">
-                    <label class="form-label" data-i18n="auth.username">Username</label>
-                    <input type="text" class="form-input" id="login-username" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" data-i18n="auth.password">Password</label>
-                    <input type="password" class="form-input" id="login-password" required>
-                </div>
-                <button type="submit" class="btn btn-primary" data-i18n="auth.login">Login</button>
-                <div id="login-error" class="error-message"></div>
-            </form>
-
-            <!-- Register Form (hidden by default) -->
-            <form id="register-form" style="display: none;">
-                <div class="form-group">
-                    <label class="form-label">Username</label>
-                    <input type="text" class="form-input" id="register-username" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-input" id="register-email" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Password <span style="font-weight:400;color:var(--ink-light)">(min 6
-                            chars)</span></label>
-                    <input type="password" class="form-input" id="register-password" required minlength="6">
-                </div>
-                <button type="submit" class="btn btn-primary">Create Account</button>
-                <div id="register-error" class="error-message"></div>
-                <div id="register-success" class="success-message" style="display:none;"></div>
-            </form>
-
-            <p class="auth-toggle" id="toggle-to-register"
-                style="text-align: center; margin-top: 20px; color: var(--ink-light); font-size: 0.85rem;">
-                <span data-i18n="auth.no_account">Don't have an account?</span> <a href="#"
-                    onclick="showRegisterForm(); return false;" style="color: var(--accent-purple); font-weight: 600;"
-                    data-i18n="auth.register">Register here</a>
-            </p>
-            <p class="auth-toggle" id="toggle-to-login"
-                style="display: none; text-align: center; margin-top: 20px; color: var(--ink-light); font-size: 0.85rem;">
-                <span data-i18n="auth.have_account">Already have an account?</span> <a href="#"
-                    onclick="showLoginForm(); return false;" style="color: var(--accent-purple); font-weight: 600;"
-                    data-i18n="auth.signin">Sign in</a>
-            </p>
-
-            <p id="demo-hint"
-                style="text-align: center; margin-top: 10px; color: var(--ink-light); font-size: 0.85rem;">
-                Demo: Student123 / password123
-            </p>
+  <!-- ═══════════════════════════ LOGIN ═══════════════════════════ -->
+  <div id="loginPage" class="login-wrap">
+    <div class="login-card">
+      <h1>🎓 KazLearn</h1>
+      <p>Admin Panel — sign in to continue</p>
+      <div id="loginAlert" class="alert alert-error">❌ <span id="loginMsg"></span></div>
+      <div class="form-grid" style="gap:14px">
+        <div>
+          <label>Username</label>
+          <input id="loginUser" type="text" placeholder="Student123" autocomplete="username">
         </div>
-    </div>
-
-    <div id="app">
-        <!-- ═══════════════════════════════════════════════════════════ -->
-        <!-- HERO SECTION (shown after login) -->
-        <!-- ═══════════════════════════════════════════════════════════ -->
-        <section class="hero-section" id="hero">
-            <!-- Navigation -->
-            <nav class="hero-nav">
-                <a href="#" class="hero-logo" aria-label="TilTalk home">
-                    <img src="logo.svg" alt="Logo" class="hero-logo-img">
-                    <span class="hero-logo-text">TilTalk</span>
-                </a>
-
-                <div class="hero-nav-links" id="hero-nav-links">
-                    <a href="#hero" class="hero-nav-link" data-i18n="nav.home">Home</a>
-                    <div class="hero-nav-dropdown">
-                        <span class="hero-nav-link hero-nav-link--dropdown" data-i18n="nav.features">
-                            Features
-                            <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
-                                <path d="m4.5 7.2 3.793 3.793a1 1 0 0 0 1.414 0L13.5 7.2" stroke="currentColor"
-                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </span>
-                        <div class="hero-dropdown-menu">
-                            <a href="javascript:void(0)" onclick="showTab('courses')" class="hero-dropdown-item"
-                                data-i18n="nav.dropdown.courses">Interactive Courses</a>
-                            <a href="javascript:void(0)" onclick="showTab('grammar')" class="hero-dropdown-item"
-                                data-i18n="nav.dropdown.grammar">Grammar
-                                Lessons</a>
-                            <a href="javascript:void(0)" onclick="showTab('words')" class="hero-dropdown-item"
-                                data-i18n="nav.dropdown.words">Vocabulary Builder</a>
-                            <a href="i.html" class="hero-dropdown-item" data-i18n="nav.dropdown.game">Translation
-                                Game</a>
-                        </div>
-                    </div>
-                    <a href="javascript:void(0)"
-                        onclick="showTab('courses'); document.querySelector('.app-layout').scrollIntoView({behavior: 'smooth'})"
-                        class="hero-nav-link" data-i18n="nav.courses">Courses</a>
-                    <a href="i.html" class="hero-nav-link" data-i18n="nav.play">Play Game</a>
-                    <button class="hero-nav-close" id="hero-nav-close" aria-label="Close menu">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <a href="javascript:void(0)"
-                    onclick="document.querySelector('.app-layout').scrollIntoView({behavior: 'smooth'})"
-                    class="hero-cta-nav" data-i18n="nav.dashboard">Dashboard</a>
-
-                <button class="hero-nav-hamburger" id="hero-nav-hamburger" aria-label="Open menu">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 6h16" />
-                        <path d="M4 12h16" />
-                        <path d="M4 18h16" />
-                    </svg>
-                </button>
-            </nav>
-
-            <!-- Badge -->
-            <div class="hero-badge">
-                <span class="hero-badge-dot"></span>
-                <span data-i18n="hero.badge">Now with interactive translation battles</span>
-                <a href="i.html" class="hero-badge-link">
-                    <span data-i18n="hero.badge_link">Play now</span>
-                    <svg width="16" height="16" viewBox="0 0 19 19" fill="none">
-                        <path d="M3.959 9.5h11.083m0 0L9.501 3.958M15.042 9.5l-5.541 5.54" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </a>
-            </div>
-
-            <!-- Headline -->
-            <h1 class="hero-headline" data-i18n="hero.headline">
-                Master the <span class="hero-headline-accent">Kazakh</span> Language with Joy
-            </h1>
-
-            <!-- Subtitle -->
-            <!-- Subtitle -->
-            <p class="hero-subtitle" data-i18n="hero.subtitle">
-                Interactive courses, grammar lessons, vocabulary games, and real-time translation battles — everything
-                you need to speak Kazakh confidently.
-            </p>
-
-            <!-- CTAs -->
-            <div class="hero-cta-group">
-                <a href="javascript:void(0)"
-                    onclick="showTab('courses'); document.querySelector('.app-layout').scrollIntoView({behavior: 'smooth'})"
-                    class="hero-btn hero-btn--primary" data-i18n="hero.btn.courses">
-                    Explore Courses
-                </a>
-                <a href="i.html" class="hero-btn hero-btn--secondary">
-                    <span data-i18n="hero.btn.game">Play Translation Game</span>
-                    <svg width="6" height="8" viewBox="0 0 6 8" fill="none">
-                        <path d="M1.25.5 4.75 4l-3.5 3.5" stroke="currentColor" stroke-opacity=".6"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </a>
-            </div>
-
-
-        </section>
-
-        <div class="app-layout">
-            <!-- Sidebar -->
-            <aside class="sidebar" id="sidebar">
-                <div class="sidebar-top">
-                    <a href="#" class="sidebar-logo-link">
-                        <img src="logo.svg" alt="Logo" class="sidebar-logo-img">
-                        <span class="sidebar-logo-text">TilTalk</span>
-                    </a>
-
-                    <nav class="sidebar-nav">
-                        <div class="sidebar-link active" onclick="showTab('dashboard')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                                <rect x="3" y="3" width="7" height="7" rx="1" />
-                                <rect x="14" y="3" width="7" height="7" rx="1" />
-                                <rect x="14" y="14" width="7" height="7" rx="1" />
-                                <rect x="3" y="14" width="7" height="7" rx="1" />
-                            </svg>
-                            <span class="sidebar-link-text" data-i18n="sidebar.dashboard">Dashboard</span>
-                        </div>
-                        <div class="sidebar-link" onclick="showTab('courses')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                            </svg>
-                            <span class="sidebar-link-text" data-i18n="sidebar.courses">Courses</span>
-                        </div>
-                        <div class="sidebar-link" onclick="showTab('grammar')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                                <polyline points="14 2 14 8 20 8" />
-                                <line x1="16" y1="13" x2="8" y2="13" />
-                                <line x1="16" y1="17" x2="8" y2="17" />
-                                <polyline points="10 9 9 9 8 9" />
-                            </svg>
-                            <span class="sidebar-link-text" data-i18n="sidebar.grammar">Grammar</span>
-                        </div>
-                        <div class="sidebar-link" onclick="showTab('words')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                                <path
-                                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                            </svg>
-                            <span class="sidebar-link-text" data-i18n="sidebar.words">My Words</span>
-                        </div>
-                        <div class="sidebar-link" onclick="showTab('slang')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                                <path
-                                    d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                                <line x1="7" y1="7" x2="7.01" y2="7" />
-                            </svg>
-                            <span class="sidebar-link-text" data-i18n="sidebar.slang">Slang</span>
-                        </div>
-                        <div class="sidebar-link" onclick="showTab('clans')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                            </svg>
-                            <span class="sidebar-link-text">Clans</span>
-                        </div>
-                        <div class="sidebar-link" onclick="showTab('leaderboard')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                                <path d="M8 21h8" />
-                                <path d="M12 17v4" />
-                                <path d="M7 4h10l-1 8H8L7 4z" />
-                                <path d="M17 8h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4" />
-                                <path d="M7 8H4a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4" />
-                            </svg>
-                            <span class="sidebar-link-text">Leaderboard</span>
-                        </div>
-                        <a href="i.html" class="sidebar-link" style="text-decoration:none;">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                                <rect x="2" y="6" width="20" height="12" rx="3" />
-                                <circle cx="9" cy="12" r="1.5" />
-                                <circle cx="15" cy="10" r="1" />
-                                <circle cx="17" cy="12" r="1" />
-                                <circle cx="15" cy="14" r="1" />
-                                <circle cx="13" cy="12" r="1" />
-                                <line x1="7" y1="10" x2="7" y2="14" />
-                                <line x1="5" y1="12" x2="9" y2="12" />
-                            </svg>
-                            <span class="sidebar-link-text" data-i18n="sidebar.game">Game</span>
-                        </a>
-                    </nav>
-                </div>
-
-                <div class="sidebar-footer">
-                    <div class="lang-switcher">
-                        <button class="lang-btn active" onclick="switchLanguage('en')">EN</button>
-                        <button class="lang-btn" onclick="switchLanguage('kk')">ҚАЗ</button>
-                        <button class="lang-btn" onclick="switchLanguage('ru')">РУС</button>
-                    </div>
-
-                    <div class="sidebar-link user-link">
-                        <div class="user-avatar" id="user-avatar">S</div>
-                        <span class="sidebar-link-text" id="username-display">Student</span>
-                    </div>
-
-                    <div class="sidebar-link logout-link" onclick="logout()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                            <polyline points="16 17 21 12 16 7" />
-                            <line x1="21" y1="12" x2="9" y2="12" />
-                        </svg>
-                        <span class="sidebar-link-text" data-i18n="sidebar.logout">Logout</span>
-                    </div>
-                </div>
-            </aside>
-
-            <!-- Main Content -->
-            <main class="main-content">
-                <div class="container">
-                    <div id="dashboard" class="tab-content active">
-                        <div class="progress-circle-container">
-                            <div class="progress-circle">
-                                <svg class="progress-ring" width="250" height="250">
-                                    <defs>
-                                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#9b6b9e;stop-opacity:1" />
-                                            <stop offset="100%" style="stop-color:#d86b8a;stop-opacity:1" />
-                                        </linearGradient>
-                                    </defs>
-                                    <circle cx="125" cy="125" r="110" fill="none" stroke="#d4d0c8" stroke-width="12">
-                                    </circle>
-                                    <circle id="progress-ring-fill" cx="125" cy="125" r="110" fill="none"
-                                        stroke="url(#gradient)" stroke-width="12" stroke-linecap="round"
-                                        stroke-dasharray="691" stroke-dashoffset="691"></circle>
-                                </svg>
-                                <div class="progress-text">
-                                    <div class="progress-percent" id="overall-progress">0%</div>
-                                    <div class="progress-label" data-i18n="stats.overall">Overall Progress</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="stats-grid">
-                            <div class="stat-card">
-                                <div class="stat-value" id="stat-courses">0</div>
-                                <div class="stat-label" data-i18n="stats.courses">Courses Completed</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="stat-words">0</div>
-                                <div class="stat-label" data-i18n="stats.words">Words Learned</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="stat-trophies">0</div>
-                                <div class="stat-label" data-i18n="stats.trophies">Trophies Earned</div>
-                            </div>
-                            <div class="stat-card">
-                                <div class="stat-value" id="stat-streak">0</div>
-                                <div class="stat-label">Day Streak</div>
-                            </div>
-                        </div>
-
-                        <!-- Trophy Room Section -->
-                        <div class="trophy-section">
-                            <h2 class="section-title">🏆 Trophy Room</h2>
-                            <div class="trophy-grid" id="trophy-list">
-                                <div class="trophy-card">
-                                    <span class="trophy-icon">🎓</span>
-                                    <div class="trophy-name">First Steps</div>
-                                    <div class="trophy-desc">Completed your first lesson</div>
-                                </div>
-                                <div class="trophy-card">
-                                    <span class="trophy-icon">🔥</span>
-                                    <div class="trophy-name">On Fire</div>
-                                    <div class="trophy-desc">Reached a 3-day streak</div>
-                                </div>
-                                <div class="trophy-card locked">
-                                    <span class="trophy-icon">🦁</span>
-                                    <div class="trophy-name">Kazakh Scholar</div>
-                                    <div class="trophy-desc">Learn 50 words successfully</div>
-                                </div>
-                                <div class="trophy-card locked">
-                                    <span class="trophy-icon">⚔️</span>
-                                    <div class="trophy-name">Battle Ready</div>
-                                    <div class="trophy-desc">Won your first translation battle</div>
-                                </div>
-                                <div class="trophy-card locked">
-                                    <span class="trophy-icon">💎</span>
-                                    <div class="trophy-name">Perfectionist</div>
-                                    <div class="trophy-desc">Score 100% on a course test</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="courses" class="tab-content">
-                        <h1 style="margin-bottom: 30px; font-weight: 900;">Available Courses</h1>
-                        <div id="courses-list" class="course-grid">
-                            <div class="loading">Loading courses...</div>
-                        </div>
-                    </div>
-
-                    <div id="course-detail" class="tab-content">
-                        <button class="back-btn" onclick="showTab('courses')">← Back to Courses</button>
-                        <div id="course-detail-content"></div>
-                    </div>
-
-                    <div id="lesson-view" class="tab-content">
-                        <button class="back-btn" onclick="backToCourseDetail()">← Back to Course</button>
-                        <div id="lesson-content"></div>
-                    </div>
-
-                    <div id="grammar" class="tab-content">
-                        <h1 style="margin-bottom: 30px; font-weight: 900;">Grammar Rules</h1>
-                        <div id="grammar-list">
-                            <div class="loading">Loading grammar rules...</div>
-                        </div>
-                    </div>
-
-                    <div id="words" class="tab-content">
-                        <h1 style="margin-bottom: 30px; font-weight: 900;">My Learned Words</h1>
-                        <div id="words-list">
-                            <div class="loading">Loading your words...</div>
-                        </div>
-                    </div>
-
-                    <div id="slang" class="tab-content">
-                        <h1 style="margin-bottom: 30px; font-weight: 900;">🗣️ Slang</h1>
-                        <p style="color:#666; margin-bottom:24px;">Learn contemporary slang and colloquial expressions
-                            in Kazakh!</p>
-                        <div id="slang-list" class="slang-grid">
-                            <!-- Slang 1 -->
-                            <div class="slang-card"
-                                style="padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; margin-bottom: 16px;">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <div class="card-title-text"
-                                            style="font-size: 1.4rem; font-weight: 800; color: #9b6b9e; margin-bottom: 6px;">
-                                            Jiggit</div>
-                                        <div style="font-size: 1rem; color: #4b5563; line-height: 1.5;">A cool,
-                                            confident guy; a "real man".</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Slang 2 -->
-                            <div class="slang-card"
-                                style="padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; margin-bottom: 16px;">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <div class="card-title-text"
-                                            style="font-size: 1.4rem; font-weight: 800; color: #9b6b9e; margin-bottom: 6px;">
-                                            Bazar zhok</div>
-                                        <div style="font-size: 1rem; color: #4b5563; line-height: 1.5;">No doubt;
-                                            agreed; awesome.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Slang 3 -->
-                            <div class="slang-card"
-                                style="padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; margin-bottom: 16px;">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <div class="card-title-text"
-                                            style="font-size: 1.4rem; font-weight: 800; color: #9b6b9e; margin-bottom: 6px;">
-                                            Krasavchik</div>
-                                        <div style="font-size: 1rem; color: #4b5563; line-height: 1.5;">Handsome; well
-                                            done; good job!</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Slang 4 -->
-                            <div class="slang-card"
-                                style="padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; margin-bottom: 16px;">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <div class="card-title-text"
-                                            style="font-size: 1.4rem; font-weight: 800; color: #9b6b9e; margin-bottom: 6px;">
-                                            Tastaj</div>
-                                        <div style="font-size: 1rem; color: #4b5563; line-height: 1.5;">Forget it; leave
-                                            it; let it go.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Slang 5 -->
-                            <div class="slang-card"
-                                style="padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; margin-bottom: 16px;">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <div class="card-title-text"
-                                            style="font-size: 1.4rem; font-weight: 800; color: #9b6b9e; margin-bottom: 6px;">
-                                            Zyn</div>
-                                        <div style="font-size: 1rem; color: #4b5563; line-height: 1.5;">Cool; great;
-                                            stylish.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Slang 6 -->
-                            <div class="slang-card"
-                                style="padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; margin-bottom: 16px;">
-                                <div style="display: flex; justify-content: space-between; align-items: start;">
-                                    <div>
-                                        <div class="card-title-text"
-                                            style="font-size: 1.4rem; font-weight: 800; color: #9b6b9e; margin-bottom: 6px;">
-                                            Myn</div>
-                                        <div style="font-size: 1rem; color: #4b5563; line-height: 1.5;">One thousand; a
-                                            lot; too much.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CLANS TAB -->
-                    <div id="clans" class="tab-content">
-                        <h1 style="margin-bottom: 8px; font-weight: 900;">⚔️ Clans</h1>
-                        <p style="color:#666; margin-bottom:24px;">Join a clan to compete together and climb the
-                            rankings!</p>
-
-                        <div id="my-clan-section"></div>
-
-                        <div id="clan-create-section">
-                            <h2 class="section-title">Create a Clan</h2>
-                            <div class="clan-create-form">
-                                <input type="text" class="form-input" id="clan-name-input" placeholder="Clan name"
-                                    maxlength="100">
-                                <input type="text" class="form-input" id="clan-desc-input"
-                                    placeholder="Description (optional)" maxlength="255">
-                                <button class="btn btn-primary" style="max-width:180px;"
-                                    onclick="createClan()">Create</button>
-                            </div>
-                            <div id="clan-error" class="error-message" style="display:none;"></div>
-                        </div>
-
-                        <h2 class="section-title" style="margin-top:30px;">Top Clans</h2>
-                        <div id="clans-grid" class="clan-grid">
-                            <!-- Clan 1 -->
-                            <div class="clan-card"
-                                style="background:#fff; border-radius:12px; padding:20px; position:relative; overflow:hidden; border:1px solid #e0e0e0; margin-bottom:16px;">
-                                <div class="clan-rank"
-                                    style="position:absolute; top:12px; right:12px; font-weight:700; color:#cbd5e1; font-size:1.5rem; line-height:1;">
-                                    #1</div>
-                                <div class="clan-name"
-                                    style="font-size:1.1rem; font-weight:700; color:#1e293b; margin-bottom:4px;">Steppe
-                                    Wolves</div>
-                                <p style="color:#666; font-size:0.85rem; margin-bottom:12px;">Masters of the Great
-                                    Steppe.</p>
-                                <div class="clan-stats" style="display:flex; gap:12px; margin-bottom:12px;">
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        👥 128 members</div>
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        ⭐ 15,400 pts</div>
-                                </div>
-                                <p style="font-size:0.75rem; color:#999; margin-top:8px;">Leader: Alibek</p>
-                                <button class="clan-join-btn"
-                                    onclick="alert('This is a demo clan available in the full version!')"
-                                    style="width:100%; padding:8px; border:none; background:#9b6b9e; color:white; border-radius:8px; font-weight:600; cursor:pointer; margin-top:12px;">Join
-                                    Clan</button>
-                            </div>
-                            <!-- Clan 2 -->
-                            <div class="clan-card"
-                                style="background:#fff; border-radius:12px; padding:20px; position:relative; overflow:hidden; border:1px solid #e0e0e0; margin-bottom:16px;">
-                                <div class="clan-rank"
-                                    style="position:absolute; top:12px; right:12px; font-weight:700; color:#cbd5e1; font-size:1.5rem; line-height:1;">
-                                    #2</div>
-                                <div class="clan-name"
-                                    style="font-size:1.1rem; font-weight:700; color:#1e293b; margin-bottom:4px;">Nomad
-                                    Soul</div>
-                                <p style="color:#666; font-size:0.85rem; margin-bottom:12px;">Wanderers seeking
-                                    knowledge.</p>
-                                <div class="clan-stats" style="display:flex; gap:12px; margin-bottom:12px;">
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        👥 95 members</div>
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        ⭐ 12,350 pts</div>
-                                </div>
-                                <p style="font-size:0.75rem; color:#999; margin-top:8px;">Leader: Dana</p>
-                                <button class="clan-join-btn"
-                                    onclick="alert('This is a demo clan available in the full version!')"
-                                    style="width:100%; padding:8px; border:none; background:#9b6b9e; color:white; border-radius:8px; font-weight:600; cursor:pointer; margin-top:12px;">Join
-                                    Clan</button>
-                            </div>
-                            <!-- Clan 3 -->
-                            <div class="clan-card"
-                                style="background:#fff; border-radius:12px; padding:20px; position:relative; overflow:hidden; border:1px solid #e0e0e0; margin-bottom:16px;">
-                                <div class="clan-rank"
-                                    style="position:absolute; top:12px; right:12px; font-weight:700; color:#cbd5e1; font-size:1.5rem; line-height:1;">
-                                    #3</div>
-                                <div class="clan-name"
-                                    style="font-size:1.1rem; font-weight:700; color:#1e293b; margin-bottom:4px;">Golden
-                                    Eagle</div>
-                                <p style="color:#666; font-size:0.85rem; margin-bottom:12px;">Soaring high above the
-                                    rest.</p>
-                                <div class="clan-stats" style="display:flex; gap:12px; margin-bottom:12px;">
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        👥 84 members</div>
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        ⭐ 11,200 pts</div>
-                                </div>
-                                <p style="font-size:0.75rem; color:#999; margin-top:8px;">Leader: Marat</p>
-                                <button class="clan-join-btn"
-                                    onclick="alert('This is a demo clan available in the full version!')"
-                                    style="width:100%; padding:8px; border:none; background:#9b6b9e; color:white; border-radius:8px; font-weight:600; cursor:pointer; margin-top:12px;">Join
-                                    Clan</button>
-                            </div>
-                            <!-- Clan 4 -->
-                            <div class="clan-card"
-                                style="background:#fff; border-radius:12px; padding:20px; position:relative; overflow:hidden; border:1px solid #e0e0e0; margin-bottom:16px;">
-                                <div class="clan-rank"
-                                    style="position:absolute; top:12px; right:12px; font-weight:700; color:#cbd5e1; font-size:1.5rem; line-height:1;">
-                                    #4</div>
-                                <div class="clan-name"
-                                    style="font-size:1.1rem; font-weight:700; color:#1e293b; margin-bottom:4px;">Tulip
-                                    Gaurd</div>
-                                <p style="color:#666; font-size:0.85rem; margin-bottom:12px;">Protectors of beauty and
-                                    language.</p>
-                                <div class="clan-stats" style="display:flex; gap:12px; margin-bottom:12px;">
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        👥 76 members</div>
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        ⭐ 9,800 pts</div>
-                                </div>
-                                <p style="font-size:0.75rem; color:#999; margin-top:8px;">Leader: Aigerim</p>
-                                <button class="clan-join-btn"
-                                    onclick="alert('This is a demo clan available in the full version!')"
-                                    style="width:100%; padding:8px; border:none; background:#9b6b9e; color:white; border-radius:8px; font-weight:600; cursor:pointer; margin-top:12px;">Join
-                                    Clan</button>
-                            </div>
-                            <!-- Clan 5 -->
-                            <div class="clan-card"
-                                style="background:#fff; border-radius:12px; padding:20px; position:relative; overflow:hidden; border:1px solid #e0e0e0; margin-bottom:16px;">
-                                <div class="clan-rank"
-                                    style="position:absolute; top:12px; right:12px; font-weight:700; color:#cbd5e1; font-size:1.5rem; line-height:1;">
-                                    #5</div>
-                                <div class="clan-name"
-                                    style="font-size:1.1rem; font-weight:700; color:#1e293b; margin-bottom:4px;">Khan’s
-                                    Legacy</div>
-                                <p style="color:#666; font-size:0.85rem; margin-bottom:12px;">Building a linguistic
-                                    empire.</p>
-                                <div class="clan-stats" style="display:flex; gap:12px; margin-bottom:12px;">
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        👥 150 members</div>
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        ⭐ 18,900 pts</div>
-                                </div>
-                                <p style="font-size:0.75rem; color:#999; margin-top:8px;">Leader: Chingis</p>
-                                <button class="clan-join-btn"
-                                    onclick="alert('This is a demo clan available in the full version!')"
-                                    style="width:100%; padding:8px; border:none; background:#9b6b9e; color:white; border-radius:8px; font-weight:600; cursor:pointer; margin-top:12px;">Join
-                                    Clan</button>
-                            </div>
-                            <!-- Clan 6 -->
-                            <div class="clan-card"
-                                style="background:#fff; border-radius:12px; padding:20px; position:relative; overflow:hidden; border:1px solid #e0e0e0; margin-bottom:16px;">
-                                <div class="clan-rank"
-                                    style="position:absolute; top:12px; right:12px; font-weight:700; color:#cbd5e1; font-size:1.5rem; line-height:1;">
-                                    #6</div>
-                                <div class="clan-name"
-                                    style="font-size:1.1rem; font-weight:700; color:#1e293b; margin-bottom:4px;">Dombra
-                                    Beats</div>
-                                <p style="color:#666; font-size:0.85rem; margin-bottom:12px;">Language through music and
-                                    rhythm.</p>
-                                <div class="clan-stats" style="display:flex; gap:12px; margin-bottom:12px;">
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        👥 60 members</div>
-                                    <div class="clan-stat"
-                                        style="font-size:0.8rem; font-weight:600; color:#475569; background:#f1f5f9; padding:4px 8px; border-radius:6px;">
-                                        ⭐ 8,500 pts</div>
-                                </div>
-                                <p style="font-size:0.75rem; color:#999; margin-top:8px;">Leader: Kairat</p>
-                                <button class="clan-join-btn"
-                                    onclick="alert('This is a demo clan available in the full version!')"
-                                    style="width:100%; padding:8px; border:none; background:#9b6b9e; color:white; border-radius:8px; font-weight:600; cursor:pointer; margin-top:12px;">Join
-                                    Clan</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- LEADERBOARD TAB -->
-                    <div id="leaderboard" class="tab-content">
-                        <h1 style="margin-bottom: 8px; font-weight: 900;">🏆 Leaderboard</h1>
-                        <p style="color:#666; margin-bottom:24px;">Top players ranked by points earned through learning
-                            and games.</p>
-
-                        <div class="section-tabs">
-                            <button class="section-tab active"
-                                onclick="showLeaderboardTab('players', this)">Players</button>
-                            <button class="section-tab" onclick="showLeaderboardTab('clans-lb', this)">Clans</button>
-                        </div>
-
-                        <div id="lb-players">
-                            <table class="leaderboard-table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Player</th>
-                                        <th>Clan</th>
-                                        <th>Points</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="lb-players-body">
-                                    <tr>
-                                        <td colspan="4" style="text-align:center; color:#999;">Loading...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div id="lb-clans-lb" style="display:none;">
-                            <table class="leaderboard-table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Clan</th>
-                                        <th>Members</th>
-                                        <th>Points</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="lb-clans-body">
-                                    <tr>
-                                        <td colspan="4" style="text-align:center; color:#999;">Loading...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div id="test-view" class="tab-content">
-                        <button class="back-btn" onclick="backToCourseDetail()">← Back to Course</button>
-                        <div id="test-content"></div>
-                    </div>
-                </div>
-            </main>
+        <div>
+          <label>Password</label>
+          <input id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password">
         </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doLogin()">Sign In</button>
+        <p style="text-align:center;font-size:.8rem;color:var(--gray)">
+          No account? <a href="#" onclick="showRegisterPage()" style="color:var(--purple);font-weight:600">Register
+            here</a>
+        </p>
+      </div>
     </div>
+  </div>
 
-    <script src="translations.js"></script>
-    <script src="app.js?v=2"></script>
-    <script>
-        // Override showTab to update sidebar active state
-        const originalShowTab = window.showTab;
-        window.showTab = function (tabName) {
-            // Update sidebar active state
-            document.querySelectorAll('.sidebar-link').forEach(link => {
-                link.classList.remove('active');
-            });
+  <!-- ═══════════════════════════ REGISTER ═══════════════════════════ -->
+  <div id="registerPage" class="login-wrap" style="display:none">
+    <div class="login-card">
+      <h1>🎓 KazLearn</h1>
+      <p>Create a new account</p>
+      <div id="registerAlert" class="alert alert-error">❌ <span id="registerMsg"></span></div>
+      <div id="registerSuccess" class="alert alert-success" style="display:none">✅ Account created! Redirecting…</div>
+      <div class="form-grid" style="gap:14px">
+        <div><label>Username</label><input id="regUser" type="text" placeholder="YourName"></div>
+        <div><label>Email</label><input id="regEmail" type="email" placeholder="you@email.com"></div>
+        <div><label>Password <span style="font-weight:400;color:var(--gray)">(min 6 chars)</span></label>
+          <input id="regPass" type="password" placeholder="••••••••">
+        </div>
+        <button class="btn btn-success" style="width:100%;justify-content:center" onclick="doRegister()">Create
+          Account</button>
+        <p style="text-align:center;font-size:.8rem;color:var(--gray)">
+          Already have one? <a href="#" onclick="showLoginPage()" style="color:var(--purple);font-weight:600">Sign
+            in</a>
+        </p>
+      </div>
+    </div>
+  </div>
 
-            const tabToLinkMap = {
-                'dashboard': 0,
-                'courses': 1,
-                'grammar': 2,
-                'words': 3,
-                'clans': 4,
-                'leaderboard': 5
-            };
+  <!-- ═══════════════════════════ MAIN APP ═══════════════════════════ -->
+  <div id="app" class="layout" style="display:none">
 
-            const linkIndex = tabToLinkMap[tabName];
-            if (linkIndex !== undefined) {
-                const links = document.querySelectorAll('.sidebar-nav .sidebar-link');
-                if (links[linkIndex]) {
-                    links[linkIndex].classList.add('active');
-                }
-            }
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-logo">🎓 TilTalk <span>Admin Panel</span></div>
+      <div class="nav-group">Content</div>
+      <div class="nav-item active" onclick="showPage('dashboard')"><span
+          class="nav-icon">🏠</span><span>Dashboard</span></div>
+      <div class="nav-item" onclick="showPage('addUser')"><span class="nav-icon">👤</span><span>Register User</span>
+      </div>
+      <div class="nav-item" onclick="showPage('addCourse')"><span class="nav-icon">📚</span><span>Add Course</span>
+      </div>
+      <div class="nav-item" onclick="showPage('addLesson')"><span class="nav-icon">📝</span><span>Add Lesson</span>
+      </div>
+      <div class="nav-item" onclick="showPage('addWord')"><span class="nav-icon">🔤</span><span>Add Word</span></div>
+      <div class="nav-item" onclick="showPage('addTestQuestion')"><span class="nav-icon">❓</span><span>Add Test
+          Question</span></div>
+      <div class="nav-group">Browse</div>
+      <div class="nav-item" onclick="showPage('viewCourses')"><span class="nav-icon">📋</span><span>View Courses</span>
+      </div>
+      <div class="nav-item" onclick="showPage('viewWords')"><span class="nav-icon">📖</span><span>View Words</span>
+      </div>
+      <div class="nav-item" onclick="showPage('viewTests')"><span class="nav-icon">📝</span><span>View Tests</span>
+      </div>
+      <div class="nav-group">Account</div>
+      <div class="nav-item" onclick="doLogout()"><span class="nav-icon">🚪</span><span>Logout</span></div>
+    </nav>
 
-            // Call original function if it exists
-            if (typeof originalShowTab === 'function') {
-                originalShowTab(tabName);
-            } else {
-                // Default tab switching
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                const targetTab = document.getElementById(tabName);
-                if (targetTab) {
-                    targetTab.classList.add('active');
-                }
-            }
-        };
+    <main class="main">
 
-        // Hero mobile menu toggle
-        const heroHamburger = document.getElementById('hero-nav-hamburger');
-        const heroNavLinks = document.getElementById('hero-nav-links');
-        const heroNavClose = document.getElementById('hero-nav-close');
-        if (heroHamburger && heroNavLinks) {
-            heroHamburger.addEventListener('click', () => heroNavLinks.classList.add('open'));
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="page active">
+        <h1>Dashboard</h1>
+        <p class="subtitle">Welcome back, <strong id="welcomeUser"></strong>!</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px">
+          <div class="card" style="margin:0;padding:20px">
+            <div style="font-size:1.8rem;font-weight:700;color:var(--purple)" id="statCourses">—</div>
+            <div style="font-size:.85rem;color:var(--gray);margin-top:4px">Total Courses</div>
+          </div>
+          <div class="card" style="margin:0;padding:20px">
+            <div style="font-size:1.8rem;font-weight:700;color:var(--green)" id="statWords">—</div>
+            <div style="font-size:.85rem;color:var(--gray);margin-top:4px">Words Learned</div>
+          </div>
+          <div class="card" style="margin:0;padding:20px">
+            <div style="font-size:1.8rem;font-weight:700;color:var(--blue)" id="statCompleted">—</div>
+            <div style="font-size:.85rem;color:var(--gray);margin-top:4px">Courses Done</div>
+          </div>
+          <div class="card" style="margin:0;padding:20px">
+            <div style="font-size:1.8rem;font-weight:700;color:#f59e0b" id="statStreak">—</div>
+            <div style="font-size:.85rem;color:var(--gray);margin-top:4px">Day Streak</div>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Quick Actions</h2>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <button class="btn btn-primary" onclick="showPage('addCourse')">➕ Add Course</button>
+            <button class="btn btn-success" onclick="showPage('addWord')">➕ Add Word</button>
+            <button class="btn btn-outline" onclick="showPage('addTestQuestion')">❓ Add Test Question</button>
+            <button class="btn btn-outline" onclick="showPage('addUser')">👤 Register User</button>
+            <button class="btn btn-outline" onclick="showPage('viewCourses')">📋 View Courses</button>
+            <button class="btn btn-outline" onclick="showPage('viewTests')">📝 View Tests</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- REGISTER NEW USER -->
+      <div id="page-addUser" class="page">
+        <h1>Register New User</h1>
+        <p class="subtitle">Create a new learner account</p>
+        <div id="userAlert" class="alert"></div>
+        <div class="card">
+          <h2>👤 User Details</h2>
+          <div class="form-grid form-grid-2">
+            <div><label>Username *</label><input id="uUser" type="text" placeholder="NewLearner"></div>
+            <div><label>Email *</label><input id="uEmail" type="email" placeholder="learner@email.com"></div>
+            <div>
+              <label>Password * <span style="font-weight:400;color:var(--gray)">(min 6 chars)</span></label>
+              <input id="uPass" type="password" placeholder="••••••••">
+            </div>
+            <div style="grid-column:1/-1;margin-top:4px">
+              <button class="btn btn-primary" onclick="submitUser()">✅ Create Account</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD COURSE -->
+      <div id="page-addCourse" class="page">
+        <h1>Add New Course</h1>
+        <p class="subtitle">Fill in all three languages</p>
+        <div id="courseAlert" class="alert"></div>
+        <div class="card">
+          <h2>📚 Course Information</h2>
+          <div class="form-grid">
+            <div class="form-grid form-grid-3">
+              <div><label>Title (English) *</label><input id="cTitleEn" type="text" placeholder="Basic Greetings"></div>
+              <div><label>Title (Kazakh) *</label><input id="cTitleKk" type="text" placeholder="Негізгі сәлемдесулер">
+              </div>
+              <div><label>Title (Russian) *</label><input id="cTitleRu" type="text" placeholder="Основные приветствия">
+              </div>
+            </div>
+            <div class="form-grid form-grid-3">
+              <div><label>Description (EN)</label><textarea id="cDescEn"
+                  placeholder="What students will learn…"></textarea></div>
+              <div><label>Description (KK)</label><textarea id="cDescKk"
+                  placeholder="Студенттер не үйренеді…"></textarea></div>
+              <div><label>Description (RU)</label><textarea id="cDescRu" placeholder="Что изучат студенты…"></textarea>
+              </div>
+            </div>
+            <div style="max-width:240px">
+              <label>Level *</label>
+              <select id="cLevel">
+                <option value="">— choose level —</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </div>
+            <div><button class="btn btn-primary" onclick="submitCourse()">✅ Create Course</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD LESSON -->
+      <div id="page-addLesson" class="page">
+        <h1>Add Lesson to Course</h1>
+        <p class="subtitle">Select a course and add a lesson</p>
+        <div id="lessonAlert" class="alert"></div>
+        <div class="card">
+          <h2>📝 Lesson Details</h2>
+          <div class="form-grid">
+            <div style="max-width:340px">
+              <label>Course *</label>
+              <select id="lCourse">
+                <option value="">— loading courses… —</option>
+              </select>
+            </div>
+            <div class="form-grid form-grid-3">
+              <div><label>Title (English) *</label><input id="lTitleEn" type="text"
+                  placeholder="Introduction to Vowels"></div>
+              <div><label>Title (Kazakh) *</label><input id="lTitleKk" type="text"
+                  placeholder="Дауысты дыбыстарға кіріспе"></div>
+              <div><label>Title (Russian) *</label><input id="lTitleRu" type="text" placeholder="Введение в гласные">
+              </div>
+            </div>
+            <div class="form-grid form-grid-3">
+              <div><label>Content (EN)</label><textarea id="lContentEn"
+                  placeholder="Lesson content in English…"></textarea></div>
+              <div><label>Content (KK)</label><textarea id="lContentKk"
+                  placeholder="Сабақ мазмұны қазақ тілінде…"></textarea></div>
+              <div><label>Content (RU)</label><textarea id="lContentRu"
+                  placeholder="Содержание урока на русском…"></textarea></div>
+            </div>
+            <div><button class="btn btn-primary" onclick="submitLesson()">✅ Add Lesson</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD WORD -->
+      <div id="page-addWord" class="page">
+        <h1>Add Word</h1>
+        <p class="subtitle">Add a new vocabulary word to a lesson</p>
+        <div id="wordAlert" class="alert"></div>
+        <div class="card">
+          <h2>🔤 Word Details</h2>
+          <div class="form-grid">
+            <div class="form-grid form-grid-2">
+              <div style="max-width:340px">
+                <label>Course *</label>
+                <select id="wCourse" onchange="loadLessonsForWord()">
+                  <option value="">— choose course —</option>
+                </select>
+              </div>
+              <div>
+                <label>Lesson *</label>
+                <select id="wLesson">
+                  <option value="">— choose course first —</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-grid form-grid-3">
+              <div><label>Kazakh *</label><input id="wKazakh" type="text" placeholder="Сәлем"></div>
+              <div><label>English *</label><input id="wEnglish" type="text" placeholder="Hello"></div>
+              <div><label>Russian *</label><input id="wRussian" type="text" placeholder="Привет"></div>
+            </div>
+            <div class="form-grid form-grid-2">
+              <div>
+                <label>Pronunciation</label>
+                <input id="wPronun" type="text" placeholder="salem">
+                <div class="form-hint">Phonetic spelling in Latin letters</div>
+              </div>
+              <div>
+                <label>Word Type</label>
+                <select id="wType">
+                  <option value="">— optional —</option>
+                  <option value="greeting">Greeting</option>
+                  <option value="expression">Expression</option>
+                  <option value="answer">Answer</option>
+                  <option value="noun">Noun</option>
+                  <option value="verb">Verb</option>
+                  <option value="adjective">Adjective</option>
+                  <option value="adverb">Adverb</option>
+                  <option value="number">Number</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-grid form-grid-3">
+              <div><label>Example sentence (KK)</label><textarea id="wExKk"
+                  placeholder="Сәлем! Қалың қалай?"></textarea></div>
+              <div><label>Example sentence (EN)</label><textarea id="wExEn"
+                  placeholder="Hello! How are you?"></textarea></div>
+              <div><label>Example sentence (RU)</label><textarea id="wExRu" placeholder="Привет! Как дела?"></textarea>
+              </div>
+            </div>
+            <div><button class="btn btn-primary" onclick="submitWord()">✅ Add Word</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW COURSES -->
+      <div id="page-viewCourses" class="page">
+        <h1>All Courses</h1>
+        <p class="subtitle">Overview of courses in the database</p>
+        <div class="card">
+          <h2>📋 Course List</h2>
+          <div class="table-wrap">
+            <table id="coursesTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Title (EN)</th>
+                  <th>Level</th>
+                  <th>Lessons</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" style="text-align:center;color:var(--gray);padding:20px">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW WORDS -->
+      <div id="page-viewWords" class="page">
+        <h1>Browse Words</h1>
+        <p class="subtitle">All vocabulary words grouped by lesson</p>
+        <div class="card">
+          <h2>🔤 Filter by Course & Lesson</h2>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end">
+            <div style="min-width:200px">
+              <label>Course</label>
+              <select id="filterCourse" onchange="loadLessonsForFilter()">
+                <option value="">All courses</option>
+              </select>
+            </div>
+            <div style="min-width:200px">
+              <label>Lesson</label>
+              <select id="filterLesson" onchange="loadWordsTable()">
+                <option value="">All lessons</option>
+              </select>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="loadWordsTable()">🔄 Refresh</button>
+          </div>
+          <div class="table-wrap">
+            <table id="wordsTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Kazakh</th>
+                  <th>English</th>
+                  <th>Russian</th>
+                  <th>Type</th>
+                  <th>Pronunciation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="6" style="text-align:center;color:var(--gray);padding:20px">Select a lesson to load words
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADD TEST QUESTION -->
+      <div id="page-addTestQuestion" class="page">
+        <h1>Add Test Question</h1>
+        <p class="subtitle">Create a new test question for a course</p>
+        <div id="testQuestionAlert" class="alert"></div>
+        <div class="card">
+          <h2>❓ Question Details</h2>
+          <div class="form-grid">
+            <div class="form-grid form-grid-2">
+              <div style="max-width:340px">
+                <label>Course *</label>
+                <select id="tqCourse">
+                  <option value="">— choose course —</option>
+                </select>
+              </div>
+              <div>
+                <label>Question Type *</label>
+                <select id="tqType">
+                  <option value="multiple_choice">Multiple Choice</option>
+                  <option value="translation">Translation</option>
+                  <option value="fill_blank">Fill in the Blank</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-grid form-grid-3">
+              <div><label>Question (English) *</label><textarea id="tqTextEn"
+                  placeholder="What is the Kazakh word for Hello?"></textarea></div>
+              <div><label>Question (Kazakh) *</label><textarea id="tqTextKk"
+                  placeholder="Hello сөзінің қазақша аудармасы?"></textarea></div>
+              <div><label>Question (Russian) *</label><textarea id="tqTextRu"
+                  placeholder="Как переводится Hello на казахский?"></textarea></div>
+            </div>
+            <div class="form-grid form-grid-2">
+              <div>
+                <label>Correct Answer *</label>
+                <input id="tqCorrect" type="text" placeholder="Сәлем">
+              </div>
+              <div>
+                <label>Points</label>
+                <input id="tqPoints" type="number" value="1" min="1" max="10">
+              </div>
+            </div>
+            <div class="form-grid form-grid-2">
+              <div><label>Option 1</label><input id="tqOpt1" type="text" placeholder="Option A"></div>
+              <div><label>Option 2</label><input id="tqOpt2" type="text" placeholder="Option B"></div>
+              <div><label>Option 3</label><input id="tqOpt3" type="text" placeholder="Option C"></div>
+              <div><label>Option 4</label><input id="tqOpt4" type="text" placeholder="Option D"></div>
+            </div>
+            <div class="form-hint">For multiple-choice questions, fill in all 4 options. For translation/fill-blank,
+              options are not required.</div>
+            <div><button class="btn btn-primary" onclick="submitTestQuestion()">✅ Add Question</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW TESTS -->
+      <div id="page-viewTests" class="page">
+        <h1>Test Questions</h1>
+        <p class="subtitle">Browse all test questions by course</p>
+        <div class="card">
+          <h2>📝 Filter by Course</h2>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end">
+            <div style="min-width:200px">
+              <label>Course</label>
+              <select id="filterTestCourse" onchange="loadTestQuestionsTable()">
+                <option value="">All courses</option>
+              </select>
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="loadTestQuestionsTable()">🔄 Refresh</button>
+          </div>
+          <div class="table-wrap">
+            <table id="testsTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Course</th>
+                  <th>Question (EN)</th>
+                  <th>Type</th>
+                  <th>Answer</th>
+                  <th>Pts</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="6" style="text-align:center;color:var(--gray);padding:20px">Loading…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div><!-- /app -->
+
+  <script>
+    // ─────────────────────────────────────────────
+    // Determine base path for API calls.
+    // If this file is in /admin/, the API is at ../api/
+    // ─────────────────────────────────────────────
+    const API = '../api';
+
+    // ─────────────────────────────────────────────
+    // Helpers
+    // ─────────────────────────────────────────────
+    async function api(file, action, method = 'GET', body = null) {
+      const url = `${API}/${file}.php?action=${action}`;
+      const opts = { method, credentials: 'include', headers: {} };
+      if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+
+      try {
+        const res = await fetch(url, opts);
+        const text = await res.text();
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          console.error('Invalid JSON:', text);
+          throw new Error('Server response was not JSON: ' + text.substring(0, 100) + '...');
         }
-        if (heroNavClose && heroNavLinks) {
-            heroNavClose.addEventListener('click', () => heroNavLinks.classList.remove('open'));
+      } catch (err) {
+        throw err;
+      }
+    }
+
+    function showAlert(id, type, msg) {
+      const el = document.getElementById(id);
+      el.className = `alert alert-${type} show`;
+      el.innerHTML = (type === 'success' ? '✅ ' : '❌ ') + msg;
+      setTimeout(() => el.classList.remove('show'), 5000);
+    }
+
+    function clearInputs(...ids) { ids.forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; }); }
+
+    function levelBadge(level) {
+      const cls = { beginner: 'badge-green', intermediate: 'badge-blue', advanced: 'badge-purple' };
+      return `<span class="badge ${cls[level] || ''}">${level}</span>`;
+    }
+
+    // ─────────────────────────────────────────────
+    // Navigation
+    // ─────────────────────────────────────────────
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('page-' + name)?.classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => {
+        if (n.getAttribute('onclick')?.includes(name)) n.classList.add('active');
+      });
+      // Load data when entering certain pages
+      if (name === 'viewCourses') loadCoursesTable();
+      if (name === 'viewWords') { loadCoursesDropdown('filterCourse'); loadWordsTable(); }
+      if (name === 'viewTests') { loadCoursesDropdown('filterTestCourse'); loadTestQuestionsTable(); }
+      if (name === 'addLesson') loadCoursesDropdown('lCourse');
+      if (name === 'addWord') loadCoursesDropdown('wCourse');
+      if (name === 'addTestQuestion') loadCoursesDropdown('tqCourse');
+    }
+
+    // ─────────────────────────────────────────────
+    // Auth
+    // ─────────────────────────────────────────────
+    function showLoginPage() { document.getElementById('loginPage').style.display = 'flex'; document.getElementById('registerPage').style.display = 'none'; document.getElementById('app').style.display = 'none'; }
+    function showRegisterPage() { document.getElementById('registerPage').style.display = 'flex'; document.getElementById('loginPage').style.display = 'none'; document.getElementById('app').style.display = 'none'; }
+
+    async function checkSession() {
+      const data = await api('auth', 'check');
+      if (data.authenticated) { showApp(data.username); }
+      else { showLoginPage(); }
+    }
+
+    function showApp(username) {
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('registerPage').style.display = 'none';
+      document.getElementById('app').style.display = 'flex';
+      document.getElementById('welcomeUser').textContent = username;
+      loadDashboard();
+      showPage('dashboard');
+    }
+
+    async function doLogin() {
+      const username = document.getElementById('loginUser').value.trim();
+      const password = document.getElementById('loginPass').value;
+      if (!username || !password) { showLoginError('Please enter username and password.'); return; }
+      const data = await api('auth', 'login', 'POST', { username, password });
+      if (data.error) { showLoginError(data.error); }
+      else { showApp(data.user.username); }
+    }
+
+    async function doRegister() {
+      const username = document.getElementById('regUser').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPass').value;
+      if (!username || !email || !password) { showAlert('registerAlert', 'error', 'All fields are required.'); return; }
+      const data = await api('auth', 'register', 'POST', { username, email, password });
+      if (data.error) { showAlert('registerAlert', 'error', data.error); }
+      else {
+        document.getElementById('registerSuccess').style.display = 'flex';
+        setTimeout(() => showApp(username), 1500);
+      }
+    }
+
+    async function doLogout() {
+      await api('auth', 'logout', 'POST');
+      showLoginPage();
+    }
+
+    function showLoginError(msg) {
+      document.getElementById('loginMsg').textContent = msg;
+      document.getElementById('loginAlert').classList.add('show');
+    }
+
+    // Allow Enter key on login form
+    document.addEventListener('DOMContentLoaded', () => {
+      ['loginUser', 'loginPass'].forEach(id =>
+        document.getElementById(id)?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); })
+      );
+      checkSession();
+    });
+
+    // ─────────────────────────────────────────────
+    // Dashboard
+    // ─────────────────────────────────────────────
+    async function loadDashboard() {
+      const data = await api('user', 'stats');
+      if (data.error) return;
+      document.getElementById('statCourses').textContent = data.total_courses_completed ?? '—';
+      document.getElementById('statWords').textContent = data.total_words_learned ?? '—';
+      document.getElementById('statCompleted').textContent = data.total_courses_completed ?? '—';
+      document.getElementById('statStreak').textContent = data.streak_days ?? '—';
+    }
+
+    // ─────────────────────────────────────────────
+    // Users
+    // ─────────────────────────────────────────────
+    async function submitUser() {
+      const username = document.getElementById('uUser').value.trim();
+      const email = document.getElementById('uEmail').value.trim();
+      const password = document.getElementById('uPass').value;
+      if (!username || !email || !password) { showAlert('userAlert', 'error', 'All fields are required.'); return; }
+      const data = await api('auth', 'register', 'POST', { username, email, password });
+      if (data.error) { showAlert('userAlert', 'error', data.error); }
+      else {
+        showAlert('userAlert', 'success', `User "${username}" created (ID: ${data.user_id})`);
+        clearInputs('uUser', 'uEmail', 'uPass');
+      }
+    }
+
+    // ─────────────────────────────────────────────
+    // Courses
+    // ─────────────────────────────────────────────
+    async function submitCourse() {
+      const payload = {
+        title_en: document.getElementById('cTitleEn').value.trim(),
+        title_kk: document.getElementById('cTitleKk').value.trim(),
+        title_ru: document.getElementById('cTitleRu').value.trim(),
+        description_en: document.getElementById('cDescEn').value.trim(),
+        description_kk: document.getElementById('cDescKk').value.trim(),
+        description_ru: document.getElementById('cDescRu').value.trim(),
+        level: document.getElementById('cLevel').value,
+      };
+      if (!payload.title_en || !payload.title_kk || !payload.title_ru || !payload.level) {
+        showAlert('courseAlert', 'error', 'Title in all 3 languages and level are required.'); return;
+      }
+      const data = await api('courses', 'add', 'POST', payload);
+      if (data.error) { showAlert('courseAlert', 'error', data.error); }
+      else {
+        showAlert('courseAlert', 'success', `Course created! ID: ${data.course_id}`);
+        clearInputs('cTitleEn', 'cTitleKk', 'cTitleRu', 'cDescEn', 'cDescKk', 'cDescRu');
+        document.getElementById('cLevel').value = '';
+      }
+    }
+
+    async function loadCoursesTable() {
+      try {
+        const courses = await api('courses', 'list');
+        const tbody = document.querySelector('#coursesTable tbody');
+        if (!Array.isArray(courses) || courses.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--gray);padding:20px">No courses found</td></tr>'; return;
         }
-    </script>
-    <!-- Chatbot Resources -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,1,0" />
-    <link rel="stylesheet" href="chatbot/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+        tbody.innerHTML = courses.map(c => `
+      <tr>
+        <td>${c.id}</td>
+        <td><strong>${c.title_en}</strong><br><small style="color:var(--gray)">${c.title_ru}</small></td>
+        <td>${levelBadge(c.level)}</td>
+        <td>${c.total_lessons}</td>
+        <td>${(c.created_at || '').substring(0, 10)}</td>
+      </tr>`).join('');
+      } catch (err) {
+        console.error('API Error:', err);
+        document.querySelector('#coursesTable tbody').innerHTML = `<tr><td colspan="5" style="text-align:center;color:red;padding:20px">Error loading courses: ${err.message}</td></tr>`;
+      }
+    }
 
-    <!-- Chatbot HTML -->
-    <button id="chatbot-toggler">
-        <span class="material-symbols-outlined">mode_comment</span>
-        <span class="material-symbols-rounded">close</span>
-    </button>
+    async function loadCoursesDropdown(selectId) {
+      const courses = await api('courses', 'list');
+      const sel = document.getElementById(selectId);
+      if (!sel) return;
+      const first = sel.options[0]?.text.includes('All') ? '<option value="">All courses</option>' : '<option value="">— choose course —</option>';
+      sel.innerHTML = first + (Array.isArray(courses) ? courses.map(c => `<option value="${c.id}">${c.title_en}</option>`).join('') : '');
+    }
 
-    <div class="chatbot-popup">
-        <!-- Chatbot Header -->
-        <div class="chat-header">
-            <div class="header-info">
-                <img src="logo.svg" class="chatbot-logo" alt="Chatbot Logo" />
-                <h2 class="logo-text">Chatbot</h2>
-            </div>
-            <button id="close-chatbot" class="custom-icon-btn">
-                <img src="close.svg" alt="Close" />
-            </button>
-        </div>
+    // ─────────────────────────────────────────────
+    // Lessons
+    // ─────────────────────────────────────────────
+    async function submitLesson() {
+      const payload = {
+        course_id: parseInt(document.getElementById('lCourse').value),
+        title_en: document.getElementById('lTitleEn').value.trim(),
+        title_kk: document.getElementById('lTitleKk').value.trim(),
+        title_ru: document.getElementById('lTitleRu').value.trim(),
+        content_en: document.getElementById('lContentEn').value.trim(),
+        content_kk: document.getElementById('lContentKk').value.trim(),
+        content_ru: document.getElementById('lContentRu').value.trim(),
+      };
+      if (!payload.course_id || !payload.title_en || !payload.title_kk || !payload.title_ru) {
+        showAlert('lessonAlert', 'error', 'Course and title in all 3 languages are required.'); return;
+      }
+      const data = await api('courses', 'add_lesson', 'POST', payload);
+      if (data.error) { showAlert('lessonAlert', 'error', data.error); }
+      else {
+        showAlert('lessonAlert', 'success', `Lesson added! ID: ${data.lesson_id}`);
+        clearInputs('lTitleEn', 'lTitleKk', 'lTitleRu', 'lContentEn', 'lContentKk', 'lContentRu');
+      }
+    }
 
-        <!-- Chatbot Body -->
-        <div class="chat-body">
-            <div class="message bot-message">
-                <img src="logo.svg" class="bot-avatar" alt="Bot Avatar" />
-                <div class="message-text" data-i18n="chatbot.greeting">
-                    Hey there 👋 <br />
-                    How can i help you today?
-                </div>
-            </div>
-        </div>
+    // ─────────────────────────────────────────────
+    // Words
+    // ─────────────────────────────────────────────
+    async function loadLessonsForWord() {
+      const courseId = document.getElementById('wCourse').value;
+      const sel = document.getElementById('wLesson');
+      sel.innerHTML = '<option value="">— loading… —</option>';
+      if (!courseId) { sel.innerHTML = '<option value="">— choose course first —</option>'; return; }
+      const course = await api('courses', `get&id=${courseId}`);
+      sel.innerHTML = '<option value="">— choose lesson —</option>';
+      if (course.lessons?.length) {
+        course.lessons.forEach(l => { const o = new Option(l.title_en, l.id); sel.add(o); });
+      }
+    }
 
-        <!-- Chatbot Footer -->
-        <div class="chat-footer">
-            <form action="#" class="chat-form">
-                <textarea placeholder="Message..." class="message-input" required></textarea>
-                <div class="chat-controls">
-                    <button type="button" id="emoji-picker" class="custom-icon-btn">
-                        <img src="emoji.svg" alt="Emoji" />
-                    </button>
-                    <div class="file-upload-wrapper">
-                        <input type="file" accept="images/*" id="file-input" hidden>
-                        <button type="button" id="file-upload" class="custom-icon-btn">
-                            <img src="upload.svg" alt="Upload" />
-                        </button>
-                    </div>
-                    <button type="submit" id="send-message" class="custom-icon-btn">
-                        <img src="send.svg" alt="Send" />
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
+    async function submitWord() {
+      const payload = {
+        lesson_id: parseInt(document.getElementById('wLesson').value),
+        kazakh: document.getElementById('wKazakh').value.trim(),
+        english: document.getElementById('wEnglish').value.trim(),
+        russian: document.getElementById('wRussian').value.trim(),
+        pronunciation: document.getElementById('wPronun').value.trim(),
+        word_type: document.getElementById('wType').value,
+        example_sentence_kk: document.getElementById('wExKk').value.trim(),
+        example_sentence_en: document.getElementById('wExEn').value.trim(),
+        example_sentence_ru: document.getElementById('wExRu').value.trim(),
+      };
+      if (!payload.lesson_id || !payload.kazakh || !payload.english || !payload.russian) {
+        showAlert('wordAlert', 'error', 'Lesson, Kazakh, English, and Russian are required.'); return;
+      }
+      const data = await api('words', 'add', 'POST', payload);
+      if (data.error) { showAlert('wordAlert', 'error', data.error); }
+      else {
+        showAlert('wordAlert', 'success', `Word "${payload.kazakh}" added! ID: ${data.word_id}`);
+        clearInputs('wKazakh', 'wEnglish', 'wRussian', 'wPronun', 'wExKk', 'wExEn', 'wExRu');
+        document.getElementById('wType').value = '';
+      }
+    }
 
-    <script src="chatbot/script.js"></script>
+    // ─────────────────────────────────────────────
+    // View Words
+    // ─────────────────────────────────────────────
+    async function loadLessonsForFilter() {
+      const courseId = document.getElementById('filterCourse').value;
+      const sel = document.getElementById('filterLesson');
+      sel.innerHTML = '<option value="">All lessons</option>';
+      if (!courseId) { loadWordsTable(); return; }
+      const course = await api('courses', `get&id=${courseId}`);
+      if (course.lessons?.length) {
+        course.lessons.forEach(l => { const o = new Option(l.title_en, l.id); sel.add(o); });
+      }
+      loadWordsTable();
+    }
+
+    async function loadWordsTable() {
+      const lessonId = document.getElementById('filterLesson')?.value;
+      const tbody = document.querySelector('#wordsTable tbody');
+      if (!lessonId) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:20px">Select a lesson to see words</td></tr>';
+        return;
+      }
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:20px">Loading…</td></tr>';
+      const words = await api('words', `by_lesson&lesson_id=${lessonId}`);
+      if (!Array.isArray(words) || words.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:20px">No words in this lesson yet</td></tr>';
+        return;
+      }
+      tbody.innerHTML = words.map(w => `
+    <tr>
+      <td>${w.id}</td>
+      <td><strong>${w.kazakh}</strong></td>
+      <td>${w.english}</td>
+      <td>${w.russian}</td>
+      <td>${w.word_type ? `<span class="badge badge-purple">${w.word_type}</span>` : '—'}</td>
+      <td style="color:var(--gray);font-style:italic">${w.pronunciation || '—'}</td>
+    </tr>`).join('');
+    }
+
+    // ─────────────────────────────────────────────
+    // Test Questions
+    // ─────────────────────────────────────────────
+    async function submitTestQuestion() {
+      const courseId = parseInt(document.getElementById('tqCourse').value);
+      const opt1 = document.getElementById('tqOpt1').value.trim();
+      const opt2 = document.getElementById('tqOpt2').value.trim();
+      const opt3 = document.getElementById('tqOpt3').value.trim();
+      const opt4 = document.getElementById('tqOpt4').value.trim();
+      const options = [opt1, opt2, opt3, opt4].filter(o => o);
+
+      const payload = {
+        course_id: courseId,
+        question_text_en: document.getElementById('tqTextEn').value.trim(),
+        question_text_kk: document.getElementById('tqTextKk').value.trim(),
+        question_text_ru: document.getElementById('tqTextRu').value.trim(),
+        question_type: document.getElementById('tqType').value,
+        correct_answer: document.getElementById('tqCorrect').value.trim(),
+        options: options,
+        points: parseInt(document.getElementById('tqPoints').value) || 1,
+      };
+
+      if (!payload.course_id || !payload.question_text_en || !payload.question_text_kk || !payload.question_text_ru || !payload.correct_answer) {
+        showAlert('testQuestionAlert', 'error', 'Course, question text in all 3 languages, and correct answer are required.'); return;
+      }
+
+      const data = await api('tests', 'add_question', 'POST', payload);
+      if (data.error) { showAlert('testQuestionAlert', 'error', data.error); }
+      else {
+        showAlert('testQuestionAlert', 'success', `Question added! ID: ${data.question_id}`);
+        clearInputs('tqTextEn', 'tqTextKk', 'tqTextRu', 'tqCorrect', 'tqOpt1', 'tqOpt2', 'tqOpt3', 'tqOpt4');
+        document.getElementById('tqPoints').value = '1';
+      }
+    }
+
+    async function loadTestQuestionsTable() {
+      const courseId = document.getElementById('filterTestCourse')?.value;
+      const tbody = document.querySelector('#testsTable tbody');
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:20px">Loading…</td></tr>';
+
+      let action = 'list_questions';
+      if (courseId) action += `&course_id=${courseId}`;
+
+      const questions = await api('tests', action);
+      if (!Array.isArray(questions) || questions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:20px">No test questions found</td></tr>'; return;
+      }
+      const typeBadge = t => {
+        const cls = { multiple_choice: 'badge-blue', translation: 'badge-green', fill_blank: 'badge-purple' };
+        const lbl = { multiple_choice: 'MC', translation: 'Trans', fill_blank: 'Fill' };
+        return `<span class="badge ${cls[t] || ''}">${lbl[t] || t}</span>`;
+      };
+      tbody.innerHTML = questions.map(q => `
+    <tr>
+      <td>${q.id}</td>
+      <td>${q.course_title || q.course_id}</td>
+      <td>${q.question_text_en}</td>
+      <td>${typeBadge(q.question_type)}</td>
+      <td><strong>${q.correct_answer}</strong></td>
+      <td>${q.points}</td>
+    </tr>`).join('');
+    }
+  </script>
 </body>
 
 </html>
